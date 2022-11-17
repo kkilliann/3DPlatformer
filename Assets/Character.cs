@@ -36,11 +36,21 @@ public class Character : MonoBehaviour
         }
 
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Vector3 direction = new Vector3(Horizontal, 0f, Vertical).normalized;
 
         Vector3 newVelocity = transform.forward * Input.GetAxis("Vertical");
         myRigidbody.velocity = new Vector3(newVelocity.x, myRigidbody.velocity.y, newVelocity.z);
 
-        characterController.Move(move * Time.deltaTime * Speed);
+        if (direction.magnitude >= 0.1f)
+        {
+            float targetAngle = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0f, targetAngle, 0f);
+            
+            characterController.Move(direction * Speed * Time.deltaTime);
+
+        }
+
+        
     
     }
 }
