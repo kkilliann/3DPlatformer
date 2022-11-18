@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class Character : MonoBehaviour
 {
-    float maxSpeed = 1.0f;
+    public float maxSpeed;
+    public float normalSpeed = 10.0f;
+    public float sprintSpeed = 20.0f;
+
     float rotation = 0.0f;
     float camRotation = 0.0f;
 
@@ -24,6 +27,7 @@ public class Character : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         myRigidbody = GetComponent<Rigidbody>();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     void Update()
@@ -34,6 +38,8 @@ public class Character : MonoBehaviour
         {
             myRigidbody.AddForce(transform.up * jumpForce);
         }
+
+        Vector3 newVelocity = (transform.forward* Input.GetAxis("Vertical") * maxSpeed) + (transform.right * Input.GetAxis("Horizontal") * maxSpeed);
 
         Vector3 move = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         Vector3 direction = new Vector3(Horizontal, 0f, Vertical).normalized;
@@ -50,7 +56,11 @@ public class Character : MonoBehaviour
 
         }
 
-        
-    
+        camRotation = camRotation - Input.GetAxis("Mouse Y") * camRotation speed;
+
+        camRotation = Mathf.Clamp(camRotation, -40.0f, 40.0);
+
+        cam.transform.localRotation = Quaternion.Euler(new Vector3(camRotation, 0.0f, 0.0f));
+
     }
 }
